@@ -73,73 +73,53 @@ Cast uses a **Bring Your Own App (BYOA)** model to keep credentials strictly pri
 ### Step 3: Configure Cast
 ```bash
 # Save credentials
-cast auth setup x
-cast auth setup linkedin
+cast x auth setup
+cast l auth setup
 
-# Authenticate via browser PKCE flow
-cast auth login x
-cast auth login linkedin
+# Authenticate via browser
+cast x auth login
+cast l auth login
 
 # Check status
-cast auth status
+cast x auth status
+cast l auth status
 ```
 
 ---
 
 ## Command Reference
 
-### Publishing Content
+### 1. Platform Commands (X & LinkedIn)
 ```bash
-# Post text to both platforms
-cast post --both "Excited to launch our new open-source CLI!"
+# Post to X (Twitter)
+cast x "Shipped our update today!"
+cast x "Architecture screenshots" -m ./shot1.png,./shot2.png
+cast x "Long breakdown of our pipeline..." -t   # Auto-splits thread
+cast x bookmarks sync                           # Sync X bookmarks to local SQLite
+cast x bookmarks search "distributed"          # Search bookmarks offline
+cast x mentions                                 # View direct replies/feedback
+cast x search "Bun 1.3"                         # Search X without a feed
 
-# Post with image attachment
-cast post --both "Architecture overview diagram." --media ./diagram.png
+# Post to LinkedIn
+cast l "Excited to share our latest project milestone!"
+cast l "System architecture diagram" -m ./diagram.png
 
-# Post to X only with automatic thread splitting for long text
-cast post --x "Multi-tweet thread content..." --thread
-
-# Validate without posting (dry run)
-cast post --both "Preview check" --dry-run
-
-# Pipe from standard input
-cat announcement.md | cast post --both
+# Post to Both (Explicit)
+cast both "Major version v1.0 is live!" -m ./banner.png
 ```
 
-### Managing Drafts
+### 2. Local Draft Vault ($EDITOR Writing)
 ```bash
-# Create a new draft in $EDITOR
-cast draft new "v1-launch"
-
-# List saved drafts
-cast draft list
-
-# Edit existing draft
-cast draft edit 1
-
-# Publish draft
-cast draft publish 1
+cast draft new "v1-launch"    # Create draft in nano/vim ($EDITOR)
+cast draft list               # List saved local drafts
+cast draft edit 1             # Re-open draft in $EDITOR
+cast draft publish 1          # Publish draft to target(s)
 ```
 
-### Offline Bookmarks & Mentions
+### 3. Diagnostics & History
 ```bash
-# Pull recent bookmarks from X into local SQLite
-cast bookmarks sync
-
-# Search bookmark vault offline
-cast bookmarks search "distributed systems"
-
-# View recent direct mentions
-cast mentions
-```
-
-### Diagnostics & History
-```bash
-# Run self-diagnostics
-cast doctor
-
-# View published post history
-cast history
+cast history                  # View published post history & live URLs
+cast doctor                   # Health check for SQLite DB, tokens & network
 ```
 
 ---

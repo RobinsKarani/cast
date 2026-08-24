@@ -1,105 +1,156 @@
 # Cast User Guide
 
-A complete, distraction-free guide to using **Cast**.
+Cast is designed as a **clean, hierarchical command tree** organized by platform. You only need to know **4 main verbs**: `x`, `l`, `both`, and `draft`.
 
 ---
 
-## 1. Initial Setup & Authentication
+## 1. The Command Tree at a Glance
 
-Run these commands once to connect your accounts:
-
-```bash
-# Configure Developer Credentials
-cast auth setup x
-cast auth setup linkedin
-
-# Authenticate via Browser
-cast auth login x
-cast auth login linkedin
-
-# Check Account & Token Health
-cast auth status
-```
-
----
-
-## 2. Instant Publishing (Output Channel)
-
-Cast defaults to broadcasting to both platforms, or you can use concise `-x` and `-l` flags.
-
-### Quick Post
-```bash
-# Post to LinkedIn only
-cast -l "Shipped our new update today!"
-
-# Post to X only
-cast -x "Shipped our new update today!"
-
-# Post to both X and LinkedIn
-cast -b "Shipped our new update today!"
-cast "Shipped our new update today!"
-```
-
-### Media Attachments
-```bash
-# Attach an image to LinkedIn
-cast -l "Architecture diagram of our pipeline" -m ./diagram.png
-
-# Attach up to 4 images to X
-cast -x "New UI screenshots" -m ./shot1.png,./shot2.png
-```
-
-### Threads (X)
-```bash
-# Automatically split long text into an ordered multi-tweet thread
-cast -x "A long breakdown of how we optimized our database queries..." -t
-```
-
-### Unix Pipes & Scripting
-```bash
-# Pipe any command output or file directly to Cast
-cat release-notes.md | cast -l
-git log -n 5 --oneline | cast -x
-cat announcement.md | cast -b
-```
-
-### Dry Run Previews (Safe Test)
-```bash
-# Validate characters, payload format, and thread splits without posting
-cast -l "Preview text check" -d
-cast -x "Long text to preview as a thread..." -t -d
-cast -b "Preview broadcast" -d
+```text
+cast
+├── x                 # Everything X (Twitter)
+│   ├── [message]     # Post a tweet or thread (cast x "...")
+│   ├── bookmarks     # List, search, or sync bookmarks (cast x bookmarks)
+│   ├── mentions      # View direct replies & feedback (cast x mentions)
+│   ├── search <q>    # Targeted search without a feed (cast x search "...")
+│   └── auth          # Setup, login, status, logout (cast x auth login)
+│
+├── l (or linkedin)   # Everything LinkedIn
+│   ├── [message]     # Post an update (cast l "...")
+│   └── auth          # Setup, login, status, logout (cast l auth login)
+│
+├── both              # Broadcast to both platforms explicitly
+│   └── [message]     # (cast both "...")
+│
+├── draft             # Local markdown drafts ($EDITOR writing vault)
+│   ├── new [title]   # Open $EDITOR to compose draft
+│   ├── list          # View all saved drafts
+│   ├── edit <id>     # Re-open draft in $EDITOR
+│   └── publish <id>  # Publish draft to target platform(s)
+│
+├── history           # Log of published posts & live permalinks
+└── doctor            # Local SQLite, keyring & network diagnostics
 ```
 
 ---
 
-## 3. Markdown Draft Vault (Distraction-Free Writing)
+## 2. Platform Commands: X (Twitter)
 
-Write and polish your thoughts in your favorite editor (`nano`, `vim`, `neovim`, `code`) before publishing.
-
-### Draft Lifecycle
+### A. Publishing Tweets & Threads
 ```bash
-# 1. Create a new draft (opens $EDITOR with frontmatter)
+# Post a single tweet
+cast x "Shipped the new update today!"
+
+# Attach images (up to 4)
+cast x "New UI screenshots" -m ./shot1.png,./shot2.png
+
+# Split long text into an ordered thread automatically
+cast x "Detailed breakdown of our architecture..." -t
+
+# Dry run preview (test characters & thread splits without posting)
+cast x "Preview text" -d
+```
+
+### B. Signal Intake (Bookmarks, Mentions & Search)
+```bash
+# Browse your bookmarks offline
+cast x bookmarks list
+
+# Sync bookmarks from X to local SQLite database
+cast x bookmarks sync
+
+# Search your offline bookmarks vault
+cast x bookmarks search "distributed systems"
+
+# View direct replies/mentions without seeing a feed
+cast x mentions
+
+# Search X for a specific topic (without opening the feed)
+cast x search "Bun 1.3 release"
+```
+
+### C. Account & Auth for X
+```bash
+cast x auth setup    # Save OAuth 2.0 Client ID
+cast x auth login    # Authenticate via browser PKCE
+cast x auth status   # Check token expiration & account handle
+cast x auth logout   # Clear stored credentials
+```
+
+---
+
+## 3. Platform Commands: LinkedIn
+
+### A. Publishing Updates
+```bash
+# Post an update to LinkedIn
+cast l "Excited to share our latest milestone!"
+
+# Attach an image
+cast l "Architecture diagram of our pipeline" -m ./diagram.png
+
+# Dry run preview
+cast l "Preview LinkedIn post" -d
+```
+
+### B. Account & Auth for LinkedIn
+```bash
+cast l auth setup    # Save OAuth Client ID & Secret
+cast l auth login    # Authenticate via browser
+cast l auth status   # Check token expiration & account handle
+cast l auth logout   # Clear stored credentials
+```
+
+---
+
+## 4. Cross-Platform & Safety Guardrails
+
+### Dual Posting (Explicit)
+```bash
+# Broadcast to both X and LinkedIn simultaneously
+cast both "Major version v1.0 is now live!" -m ./banner.png
+```
+
+### Accidental Cross-Post Protection
+If you run `cast post "message"` or `cast "message"` without specifying a platform, Cast will **never** post to both silently. 
+
+In interactive mode, Cast will prompt you:
+```text
+Where would you like to publish this post?
+  1) X (Twitter) only
+  2) LinkedIn only
+  3) Both platforms (X & LinkedIn)
+  4) Cancel
+Select destination [1/2/3/4]:
+```
+
+---
+
+## 5. Markdown Draft Vault (Distraction-Free Writing)
+
+Write and edit your thoughts in your terminal editor (`nano`, `vim`, `neovim`, `code`) before publishing.
+
+```bash
+# 1. Create a draft (opens $EDITOR with frontmatter)
 cast draft new "v1-launch"
 
-# 2. List all saved local drafts
+# 2. List all local drafts
 cast draft list
 
-# 3. Re-edit an existing draft in $EDITOR
+# 3. Edit draft #1 in $EDITOR
 cast draft edit 1
 
-# 4. View draft contents in the terminal
+# 4. View draft contents in terminal
 cast draft show 1
 
-# 5. Publish draft to its target platform(s)
+# 5. Publish draft #1
 cast draft publish 1
 
-# 6. Delete a draft
+# 6. Delete draft #1
 cast draft delete 1
 ```
 
-### Draft Frontmatter Format
-When editing drafts in `cast draft new`, you can customize targets and attachments:
+### Draft Template Format
 ```markdown
 ---
 title: "Product Launch"
@@ -113,72 +164,49 @@ Cast v0.1 is live! A terminal-first tool for intentional publishing.
 
 ---
 
-## 4. Bookmarks Vault (Offline Knowledge Base)
-
-Sync and search your X bookmarks without opening the web feed.
+## 6. Unix Pipes & Scripting
 
 ```bash
-# Sync your bookmarks from X to local SQLite database
-cast bookmarks sync
+# Pipe git commits directly to X
+git log -n 3 --oneline | cast x
 
-# View saved bookmarks in the terminal
-cast bookmarks list
+# Pipe release notes to LinkedIn
+cat release-notes.md | cast l
 
-# Offline full-text search across all saved bookmarks
-cast bookmarks search "distributed systems"
+# Pipe announcements to both
+cat announcement.md | cast both
 ```
 
 ---
 
-## 5. Mentions & Intentional Search
-
-Stay informed on direct feedback and search specific topics without algorithmic distractions.
+## 7. Diagnostics & Audit History
 
 ```bash
-# View recent direct mentions and replies to your posts
-cast mentions
-
-# Search X for a specific topic (without opening the feed)
-cast search "Bun 1.3 release"
-
-# Search your local offline bookmark vault
-cast search "query" --local
-```
-
----
-
-## 6. Audit, Diagnostics & System Control
-
-```bash
-# View history of all posts published through Cast (with live URLs)
+# View all published posts and live URLs
 cast history
 
-# Run health diagnostics on SQLite database, credentials, and API reachability
+# Run health diagnostics on database, credentials, and API connections
 cast doctor
-
-# Clear stored credentials for a platform
-cast auth logout x
-cast auth logout linkedin
 ```
 
 ---
 
-## 7. Command Cheat Sheet Summary
+## 8. Summary of Every Command You Need
 
-| Action | Command |
+| Command | Action |
 | :--- | :--- |
-| **Post to LinkedIn** | `cast -l "..."` |
-| **Post to X** | `cast -x "..."` |
-| **Post to Both** | `cast -b "..."` *(or `cast "..."`)* |
-| **Attach Image** | `cast -l "..." -m <path>` |
-| **Create Thread (X)** | `cast -x "..." -t` |
-| **Dry Run Preview** | `cast -l "..." -d` |
-| **New Markdown Draft** | `cast draft new [title]` |
-| **List Drafts** | `cast draft list` |
-| **Publish Draft** | `cast draft publish <id>` |
-| **Sync Bookmarks** | `cast bookmarks sync` |
-| **Search Bookmarks** | `cast bookmarks search "<query>"` |
-| **View Mentions** | `cast mentions` |
-| **Intentional Search** | `cast search "<query>"` |
-| **View Post History** | `cast history` |
-| **System Diagnostics** | `cast doctor` |
+| `cast x "..."` | Post to X (Twitter) |
+| `cast x -m <path>` | Post to X with images |
+| `cast x -t "..."` | Post multi-tweet thread to X |
+| `cast x bookmarks` | View offline bookmarks vault |
+| `cast x bookmarks sync` | Sync bookmarks from X |
+| `cast x mentions` | View direct replies/mentions |
+| `cast x search "<q>"` | Search X intentionally |
+| `cast l "..."` | Post to LinkedIn |
+| `cast l -m <path>` | Post to LinkedIn with image |
+| `cast both "..."` | Post to both X & LinkedIn |
+| `cast draft new` | Create markdown draft in `$EDITOR` |
+| `cast draft list` | List all saved drafts |
+| `cast draft publish <id>` | Publish saved draft |
+| `cast history` | View published post log & URLs |
+| `cast doctor` | Check system & API health |
