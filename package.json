@@ -1,0 +1,22 @@
+{
+  "name": "cast-monorepo",
+  "version": "0.1.0",
+  "description": "An open-source, terminal-first CLI for intentional social media publishing and retrieval on X and LinkedIn.",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun run packages/cli/src/index.ts",
+    "build": "bun build --compile --minify packages/cli/src/index.ts --outfile dist/cast",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  },
+  "license": "MIT"
+}

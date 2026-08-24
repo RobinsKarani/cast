@@ -1,0 +1,16 @@
+{
+  "name": "cast",
+  "version": "0.1.0",
+  "description": "Terminal-first CLI for intentional social media publishing and retrieval.",
+  "bin": {
+    "cast": "src/index.ts"
+  },
+  "type": "module",
+  "dependencies": {
+    "@cast/types": "workspace:*",
+    "@cast/adapters": "workspace:*",
+    "@cast/core": "workspace:*",
+    "citty": "^0.1.6",
+    "picocolors": "^1.1.1"
+  }
+}

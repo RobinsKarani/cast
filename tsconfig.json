@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ESNext"],
+    "types": ["bun-types", "@types/node"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "baseUrl": ".",
+    "paths": {
+      "@cast/types": ["packages/types/src/index.ts"],
+      "@cast/types/*": ["packages/types/src/*"],
+      "@cast/core": ["packages/core/src/index.ts"],
+      "@cast/core/*": ["packages/core/src/*"],
+      "@cast/adapters": ["packages/adapters/src/index.ts"],
+      "@cast/adapters/*": ["packages/adapters/src/*"]
+    }
+  },
+  "include": ["packages/**/*.ts", "test/**/*.ts"]
+}

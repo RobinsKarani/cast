@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+bun.lockb
+
+# Build Outputs
+dist/
+build/
+*.tsbuildinfo
+
+# OS / Environment
+.DS_Store
+Thumbs.db
+.env
+.env.*
+!.env.example
+
+# Local Cast runtime storage (test data)
+.cast/
+cast.db
+credentials.enc
+
+# Logs & scratch
+*.log
+scratch/
+
+# Agent instructions (Local / Custom)
+AGENTS.md
+agents.md
