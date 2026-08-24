@@ -32,7 +32,7 @@ curl -fsSL https://bun.sh/install | bash
 
 ### 2. Clone & Build
 ```bash
-git clone https://github.com/yourusername/cast.git
+git clone https://github.com/RobinsKarani/cast.git
 cd cast
 bun install
 bun run build
@@ -41,6 +41,8 @@ This produces the standalone binary at `./dist/cast`. You can symlink it to your
 ```bash
 sudo ln -s $(pwd)/dist/cast /usr/local/bin/cast
 ```
+
+> **Detailed Guide**: See [guide.md](guide.md) for the complete user guide and command cheat sheet.
 
 ---
 
@@ -55,7 +57,7 @@ Cast uses a **Bring Your Own App (BYOA)** model to keep credentials strictly pri
    * App Permissions: **Read and write**
    * Type of App: **Web App, Automated App or Bot** (or Native App)
    * Callback URI: `http://127.0.0.1:3391/callback`
-   * Website URL: `https://github.com/yourusername/cast`
+   * Website URL: `https://github.com/RobinsKarani/cast`
 4. Copy your **OAuth 2.0 Client ID** and **Client Secret**.
 
 ### Step 2: Set Up LinkedIn App
