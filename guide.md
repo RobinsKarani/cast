@@ -8,7 +8,7 @@ Cast is designed as a **clean, hierarchical command tree** organized by platform
 
 ```text
 cast
-├── x                 # Everything X (Twitter)
+├── x                 # Everything X
 │   ├── [message]     # Post a tweet or thread (cast x "...")
 │   ├── bookmarks     # List, search, or sync bookmarks (cast x bookmarks)
 │   ├── mentions      # View direct replies & feedback (cast x mentions)
@@ -34,7 +34,7 @@ cast
 
 ---
 
-## 2. Platform Commands: X (Twitter)
+## 2. Platform Commands: X
 
 ### A. Publishing Tweets & Threads
 ```bash
@@ -117,7 +117,7 @@ If you run `cast post "message"` or `cast "message"` without specifying a platfo
 In interactive mode, Cast will prompt you:
 ```text
 Where would you like to publish this post?
-  1) X (Twitter) only
+  1) X only
   2) LinkedIn only
   3) Both platforms (X & LinkedIn)
   4) Cancel
@@ -159,7 +159,7 @@ media: [./assets/hero.png]
 tags: [oss, typescript]
 ---
 
-Cast v0.1 is live! A terminal-first tool for intentional publishing.
+Cast v0.1 is live! A tool for intentional publishing.
 ```
 
 ---
@@ -195,7 +195,7 @@ cast doctor
 
 | Command | Action |
 | :--- | :--- |
-| `cast x "..."` | Post to X (Twitter) |
+| `cast x "..."` | Post to X |
 | `cast x -m <path>` | Post to X with images |
 | `cast x -t "..."` | Post multi-tweet thread to X |
 | `cast x bookmarks` | View offline bookmarks vault |

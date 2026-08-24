@@ -97,7 +97,7 @@ const xAuthCommand = defineCommand({
 export const xCommand = defineCommand({
   meta: {
     name: 'x',
-    description: 'X (Twitter) commands: post, bookmarks, mentions, search, and auth',
+    description: 'X commands: post, bookmarks, mentions, search, and auth',
   },
   subCommands: {
     post: defineCommand({

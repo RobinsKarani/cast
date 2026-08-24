@@ -9,7 +9,7 @@ export class UI {
   ██║     ██╔══██║╚════██║   ██║   
   ╚██████╗██║  ██║███████║   ██║   
    ╚═════╝╚═╝  ╚═╝╚══════╝   ╚═╝   
-    ${pc.dim('Intentional Terminal Social Media CLI')}
+    ${pc.dim('Intentional Social Media CLI')}
 `));
   }
 

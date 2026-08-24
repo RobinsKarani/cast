@@ -90,7 +90,7 @@ export async function executePost(opts: PostExecutionOptions): Promise<void> {
   if (targets.length === 0) {
     if (process.stdin.isTTY) {
       console.log(pc.bold('\nWhere would you like to publish this post?'));
-      console.log(`  ${pc.cyan('1')} X (Twitter) only`);
+      console.log(`  ${pc.cyan('1')} X only`);
       console.log(`  ${pc.cyan('2')} LinkedIn only`);
       console.log(`  ${pc.cyan('3')} Both platforms (X & LinkedIn)`);
       console.log(`  ${pc.cyan('4')} Cancel\n`);

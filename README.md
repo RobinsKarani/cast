@@ -1,6 +1,6 @@
 # Cast
 
-A terminal-first CLI for intentional publishing to **X (Twitter)** and **LinkedIn** without feeds, algorithms, or distractions.
+Use X and LinkedIn via CLI.
 
 ---
 
@@ -29,7 +29,7 @@ sudo ln -sf $(pwd)/dist/cast /usr/local/bin/cast
 
 ### 1. Publishing
 ```bash
-# Post to X (Twitter)
+# Post to X
 cast x "Shipped the update today!"
 cast x "New screenshots" -m ./shot1.png,./shot2.png
 cast x "Long text..." -t   # Auto-splits thread

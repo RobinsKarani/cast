@@ -1,7 +1,7 @@
 {
   "name": "cast-monorepo",
   "version": "0.1.0",
-  "description": "An open-source, terminal-first CLI for intentional social media publishing and retrieval on X and LinkedIn.",
+  "description": "Use X and LinkedIn via CLI.",
   "private": true,
   "type": "module",
   "workspaces": [

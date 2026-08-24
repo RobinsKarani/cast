@@ -72,7 +72,7 @@ const main = defineCommand({
   meta: {
     name: 'cast',
     version: '0.1.0',
-    description: 'An open-source, terminal-first CLI for intentional social media use on X and LinkedIn.',
+    description: 'Use X and LinkedIn via CLI.',
   },
   subCommands: {
     // Platform Command Trees

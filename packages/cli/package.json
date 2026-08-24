@@ -1,7 +1,7 @@
 {
   "name": "cast",
   "version": "0.1.0",
-  "description": "Terminal-first CLI for intentional social media publishing and retrieval.",
+  "description": "Use X and LinkedIn via CLI.",
   "bin": {
     "cast": "src/index.ts"
   },
