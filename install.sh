@@ -50,28 +50,29 @@ case "${OS}" in
 esac
 
 echo "==> Target binary: ${TARGET}"
+DOWNLOAD_URL="https://github.com/${REPO}/releases/latest/download/${TARGET}"
 
-# Fetch latest release URL
-LATEST_URL=$(curl -fsSL "https://api.github.com/repos/${REPO}/releases/latest" | grep "browser_download_url.*${TARGET}" | cut -d : -f 2,3 | tr -d '\"' | xargs)
-
-if [ -z "${LATEST_URL}" ]; then
-  # Fallback to direct tag URL if API rate limit or no release yet
-  LATEST_URL="https://github.com/${REPO}/releases/download/v0.1.0/${TARGET}"
-fi
-
-echo "==> Downloading Cast binary from ${LATEST_URL}..."
+echo "==> Downloading Cast binary from ${DOWNLOAD_URL}..."
 
 mkdir -p "${INSTALL_DIR}"
 TMP_FILE="$(mktemp)"
 
-if curl -fLo "${TMP_FILE}" "${LATEST_URL}"; then
+if curl -fL --progress-bar -o "${TMP_FILE}" "${DOWNLOAD_URL}"; then
   mv "${TMP_FILE}" "${INSTALL_DIR}/${BIN_NAME}"
   chmod +x "${INSTALL_DIR}/${BIN_NAME}"
   echo "==> Successfully installed Cast to ${INSTALL_DIR}/${BIN_NAME}"
 else
-  echo "Error: Failed to download binary. Please ensure release exists at https://github.com/${REPO}/releases" >&2
-  rm -f "${TMP_FILE}"
-  exit 1
+  # Fallback to tagged release URL
+  FALLBACK_URL="https://github.com/${REPO}/releases/download/v0.1.0/${TARGET}"
+  if curl -fL --progress-bar -o "${TMP_FILE}" "${FALLBACK_URL}"; then
+    mv "${TMP_FILE}" "${INSTALL_DIR}/${BIN_NAME}"
+    chmod +x "${INSTALL_DIR}/${BIN_NAME}"
+    echo "==> Successfully installed Cast to ${INSTALL_DIR}/${BIN_NAME}"
+  else
+    echo "Error: Failed to download binary from GitHub Releases." >&2
+    rm -f "${TMP_FILE}"
+    exit 1
+  fi
 fi
 
 # Ensure INSTALL_DIR is in PATH
