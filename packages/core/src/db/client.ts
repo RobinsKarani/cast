@@ -12,7 +12,15 @@ export class DbClient {
       this.dbPath = ':memory:';
       this.db = new Database(':memory:');
     } else {
-      const dataDir = customPath || join(homedir(), '.local', 'share', 'cast');
+      let dataDir: string;
+      if (customPath) {
+        dataDir = customPath;
+      } else if (process.platform === 'win32' && process.env.LOCALAPPDATA) {
+        dataDir = join(process.env.LOCALAPPDATA, 'cast');
+      } else {
+        dataDir = join(homedir(), '.local', 'share', 'cast');
+      }
+
       if (!existsSync(dataDir)) {
         mkdirSync(dataDir, { recursive: true, mode: 0o700 });
       }

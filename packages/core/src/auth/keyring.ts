@@ -26,7 +26,13 @@ export class SecureCredentialStore {
   private readonly credPath: string;
 
   constructor(customDir?: string) {
-    this.configDir = customDir || join(homedir(), '.config', 'cast');
+    if (customDir) {
+      this.configDir = customDir;
+    } else if (process.platform === 'win32' && process.env.APPDATA) {
+      this.configDir = join(process.env.APPDATA, 'cast');
+    } else {
+      this.configDir = join(homedir(), '.config', 'cast');
+    }
     this.credPath = join(this.configDir, 'credentials.enc');
   }
 
@@ -37,8 +43,9 @@ export class SecureCredentialStore {
   }
 
   private getMasterKey(salt: Buffer): Buffer {
-    // Derive key from user home path and machine attributes
-    const seed = `cast-secure-vault:${homedir()}:${process.env.USER || 'cast-user'}`;
+    // Derive key from user home path and machine attributes across Linux, macOS, and Windows
+    const username = process.env.USER || process.env.USERNAME || 'cast-user';
+    const seed = `cast-secure-vault:${homedir()}:${username}`;
     return pbkdf2Sync(seed, salt, 100000, 32, 'sha256');
   }
 
