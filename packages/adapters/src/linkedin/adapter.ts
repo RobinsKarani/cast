@@ -41,7 +41,7 @@ export class LinkedInAdapter extends BasePlatformAdapter {
   }
 
   generateAuthUrl(state: string): string {
-    const scopes = ['openid', 'profile', 'email', 'w_member_social'].join(' ');
+    const scopes = ['openid', 'profile', 'w_member_social'].join(' ');
     const params = new URLSearchParams({
       response_type: 'code',
       client_id: this.credentials.clientId,

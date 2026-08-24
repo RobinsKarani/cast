@@ -321,10 +321,14 @@ export class XAdapter extends BasePlatformAdapter {
 
         if (!res.ok) {
           const errText = await res.text();
+          let friendlyError = `X API returned ${res.status}: ${errText}`;
+          if (res.status === 402 || errText.includes('credits-depleted') || errText.includes('credits depleted')) {
+            friendlyError = `X credits depleted (402 Payment Required). Add API credits at https://console.x.com/ to post to X.`;
+          }
           return {
             success: false,
             platform: this.platformId,
-            error: `X API returned ${res.status}: ${errText}`,
+            error: friendlyError,
             publishedAt: new Date(),
           };
         }
@@ -454,6 +458,62 @@ export class XAdapter extends BasePlatformAdapter {
         inReplyToPostId: tweet.conversation_id,
         createdAt: tweet.created_at ? new Date(tweet.created_at) : new Date(),
         url: `https://x.com/${author.username}/status/${tweet.id}`,
+      };
+    });
+  }
+
+  async searchRecent(tokens: AuthTokens, query: string, limit = 10): Promise<BookmarkItem[]> {
+    const params = new URLSearchParams({
+      query,
+      max_results: Math.min(Math.max(limit, 10), 100).toString(),
+      'tweet.fields': 'created_at,author_id',
+      expansions: 'author_id',
+      'user.fields': 'username,name',
+    });
+
+    const res = await fetch(
+      `https://api.x.com/2/tweets/search/recent?${params.toString()}`,
+      {
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.text();
+      let friendlyError = `Failed to search X (${res.status}): ${err}`;
+      if (res.status === 402 || err.includes('credits-depleted')) {
+        friendlyError = `X credits depleted (402). Add API credits at https://console.x.com/ to use search.`;
+      }
+      throw new Error(friendlyError);
+    }
+
+    const data = (await res.json()) as {
+      data?: Array<{ id: string; text: string; created_at?: string; author_id: string }>;
+      includes?: { users?: Array<{ id: string; username: string; name: string }> };
+    };
+
+    if (!data.data) return [];
+
+    const userMap = new Map<string, { username: string; name: string }>();
+    if (data.includes?.users) {
+      for (const u of data.includes.users) {
+        userMap.set(u.id, { username: u.username, name: u.name });
+      }
+    }
+
+    return data.data.map((tweet) => {
+      const author = userMap.get(tweet.author_id) || { username: 'unknown', name: 'Unknown' };
+      return {
+        id: `x:${tweet.id}`,
+        platform: 'x' as const,
+        externalId: tweet.id,
+        authorHandle: author.username,
+        authorName: author.name,
+        text: tweet.text,
+        url: `https://x.com/${author.username}/status/${tweet.id}`,
+        createdAt: tweet.created_at ? new Date(tweet.created_at) : new Date(),
       };
     });
   }

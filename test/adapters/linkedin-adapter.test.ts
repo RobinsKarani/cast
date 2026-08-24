@@ -19,7 +19,7 @@ describe('LinkedInAdapter', () => {
     const url = adapter.generateAuthUrl('test-state-linkedin');
     expect(url).toContain('https://www.linkedin.com/oauth/v2/authorization');
     expect(url).toContain('client_id=linkedin-client-id');
-    expect(url).toContain('scope=openid+profile+email+w_member_social');
+    expect(url).toContain('scope=openid+profile+w_member_social');
     expect(url).toContain('state=test-state-linkedin');
   });
 

@@ -18,30 +18,36 @@ export const postCommand = defineCommand({
     },
     x: {
       type: 'boolean',
+      alias: 'x',
       description: 'Post to X only',
       default: false,
     },
     linkedin: {
       type: 'boolean',
+      alias: 'l',
       description: 'Post to LinkedIn only',
       default: false,
     },
     both: {
       type: 'boolean',
+      alias: 'b',
       description: 'Post to both X and LinkedIn',
       default: false,
     },
     media: {
       type: 'string',
+      alias: 'm',
       description: 'Comma-separated paths to media images',
     },
     thread: {
       type: 'boolean',
+      alias: 't',
       description: 'Split long text into an X thread',
       default: false,
     },
     'dry-run': {
       type: 'boolean',
+      alias: 'd',
       description: 'Validate and preview post without sending',
       default: false,
     },
