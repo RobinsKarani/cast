@@ -38,7 +38,8 @@ export const doctorCommand = defineCommand({
       } else if (!s.authenticated) {
         console.log(`  ${pc.yellow('⚠')} ${name}: Configured but not logged in (run \`cast auth login ${platform}\`)`);
       } else {
-        console.log(`  ${pc.green('✔')} ${name}: Authenticated as @${s.handle} (Expires: ${s.expiresAt ? new Date(s.expiresAt).toLocaleDateString() : 'N/A'})`);
+        const handleDisplay = s.handle ? `@${s.handle}` : 'Active Session';
+        console.log(`  ${pc.green('✔')} ${name}: Authenticated (${handleDisplay}) (Expires: ${s.expiresAt ? new Date(s.expiresAt).toLocaleDateString() : 'N/A'})`);
       }
     }
 
