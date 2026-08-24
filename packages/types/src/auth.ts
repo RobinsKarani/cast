@@ -16,11 +16,8 @@ export interface StoredPlatformAuth {
 }
 
 export interface StoredCredentialsFile {
-  readonly version: number;
-  readonly platforms: {
-    readonly x?: StoredPlatformAuth;
-    readonly linkedin?: StoredPlatformAuth;
-  };
+  version: number;
+  platforms: Partial<Record<PlatformId, StoredPlatformAuth>>;
 }
 
 export interface PKCEPair {

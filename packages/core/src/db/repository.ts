@@ -78,8 +78,8 @@ export class CastRepository {
     const current = this.getDraft(id);
     if (!current) return false;
 
-    const mediaPathsJson = updates.mediaPaths !== undefined
-      ? JSON.stringify(updates.mediaPaths)
+    const mediaPathsJson = updates.media_paths !== undefined
+      ? JSON.stringify(updates.media_paths)
       : (current.media_paths ? JSON.stringify(current.media_paths) : null);
 
     db.query(`

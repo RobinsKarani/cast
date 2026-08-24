@@ -117,7 +117,7 @@ export class XAdapter extends BasePlatformAdapter {
       refreshToken: data.refresh_token,
       expiresAt,
       scope: data.scope,
-      token_type: data.token_type,
+      tokenType: data.token_type,
     };
   }
 
@@ -167,7 +167,7 @@ export class XAdapter extends BasePlatformAdapter {
       refreshToken: data.refresh_token || refreshToken,
       expiresAt,
       scope: data.scope,
-      token_type: data.token_type,
+      tokenType: data.token_type,
     };
   }
 
