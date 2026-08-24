@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-release-binaries:
+    name: Build Standalone Binaries (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: bun-linux-x64
+            artifact_name: cast-linux-x64
+          - os: ubuntu-latest
+            target: bun-linux-arm64
+            artifact_name: cast-linux-arm64
+          - os: macos-latest
+            target: bun-darwin-x64
+            artifact_name: cast-darwin-x64
+          - os: macos-latest
+            target: bun-darwin-arm64
+            artifact_name: cast-darwin-arm64
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Build Standalone Binary
+        run: |
+          mkdir -p bin
+          bun build --compile --minify --target=${{ matrix.target }} packages/cli/src/index.ts --outfile bin/${{ matrix.artifact_name }}
+
+      - name: Upload Binary Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: bin/${{ matrix.artifact_name }}
+
+  publish-release:
+    name: Create GitHub Release
+    needs: build-release-binaries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-binaries
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-binaries/**/*
+          generate_release_notes: true

@@ -25,9 +25,18 @@ export class PublishingOrchestrator {
   private readonly authManager: AuthManager;
   private readonly repository: CastRepository;
 
-  constructor(authManager?: AuthManager, repository?: CastRepository) {
-    this.authManager = authManager || new AuthManager();
-    this.repository = repository || new CastRepository();
+  constructor(
+    authManagerOrOptions?: AuthManager | { authManager?: AuthManager; repository?: CastRepository },
+    repository?: CastRepository
+  ) {
+    if (authManagerOrOptions && ('authManager' in authManagerOrOptions || 'repository' in authManagerOrOptions)) {
+      const opts = authManagerOrOptions as { authManager?: AuthManager; repository?: CastRepository };
+      this.authManager = opts.authManager || new AuthManager();
+      this.repository = opts.repository || new CastRepository();
+    } else {
+      this.authManager = (authManagerOrOptions as AuthManager) || new AuthManager();
+      this.repository = repository || new CastRepository();
+    }
   }
 
   async publish(options: PublishOptions): Promise<PublishReport> {
