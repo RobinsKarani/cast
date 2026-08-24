@@ -22,15 +22,18 @@
 
 ---
 
-## Quick Start & Installation
+## Installation & Quick Start
 
-### 1. Prerequisites
-Install [Bun](https://bun.sh) (v1.1+):
+### 1. One-Line Install (macOS & Linux)
+Install the standalone binary directly without needing Bun or Node installed:
 ```bash
-curl -fsSL https://bun.sh/install | bash
+curl -fsSL https://raw.githubusercontent.com/RobinsKarani/cast/main/install.sh | bash
 ```
 
-### 2. Clone & Build
+### 2. Windows
+Download the latest `cast-windows-x64.exe` from the [GitHub Releases](https://github.com/RobinsKarani/cast/releases) page.
+
+### 3. Build from Source (Any Platform)
 ```bash
 git clone https://github.com/RobinsKarani/cast.git
 cd cast
