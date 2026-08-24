@@ -133,7 +133,10 @@ export class AuthManager {
 
   getStatus(): Record<PlatformId, { configured: boolean; authenticated: boolean; handle?: string; expiresAt?: string }> {
     const platforms: PlatformId[] = ['x', 'linkedin'];
-    const result: any = {};
+    const result: Record<PlatformId, { configured: boolean; authenticated: boolean; handle?: string; expiresAt?: string }> = {
+      x: { configured: false, authenticated: false },
+      linkedin: { configured: false, authenticated: false },
+    };
 
     for (const p of platforms) {
       const auth = this.store.getPlatformAuth(p);

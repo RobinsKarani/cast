@@ -43,7 +43,6 @@ export class PublishingOrchestrator {
     const { targets, payload, dryRun, draftId } = options;
     const validationErrors: Array<{ platform: PlatformId; errors: string[] }> = [];
 
-    // Step 1: Validate payload against all targets
     for (const target of targets) {
       const adapter = this.authManager.getAdapter(target);
       const validation = adapter.validatePayload(payload);
@@ -64,7 +63,6 @@ export class PublishingOrchestrator {
       };
     }
 
-    // Step 2: Handle dry-run
     if (dryRun) {
       const simulatedResults: PlatformPostResult[] = targets.map((t) => ({
         success: true,
@@ -82,7 +80,6 @@ export class PublishingOrchestrator {
       };
     }
 
-    // Step 3: Execute live publications
     const executionPromises = targets.map(async (target): Promise<PlatformPostResult> => {
       try {
         const adapter = this.authManager.getAdapter(target);
@@ -100,7 +97,6 @@ export class PublishingOrchestrator {
 
     const results = await Promise.all(executionPromises);
 
-    // Step 4: Record in local repository
     const recordedPostId = this.repository.recordPublishedPost({
       content: payload.text,
       mediaPaths: payload.mediaPaths,
